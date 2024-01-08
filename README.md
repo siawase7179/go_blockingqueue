@@ -1,6 +1,50 @@
 # go_blockingqueue
 
+```go
+func TestChannel(t *testing.T) {
+  var capacity int
+  capacity = 10
+  value := make(chan int)
+  
+  go func() {
+    for i := 0; i < capacity; i++ {
+      value <- i
+      time.Sleep(time.Second)
+    }
+    close(value)
+  }()
+  
+  var groupCount int
+  groupCount = 5
+  wg := new(sync.WaitGroup)
+  wg.Add(groupCount)
+  
+  for i := 0; i < 5; i++ {
+    go func(n int) {
+  
+      for {
+        result, ok := <-value
+  
+        if !ok {
+          break
+        } else {
+          t.Logf("pop[%d] : %d\n", n+1, result)
+        }
+      }
+      wg.Done()
+    }(i)
+  }
+  
+  wg.Wait()
+  fmt.Println("done...")
+}
+```
+채널로도 queue 형식이 가능하나 채널이 닫혀야 for문에사 빠져나올 수 있기 때문에
+
+go루틴을 계속 유지한 채로 통신을 하고 싶었기에
+
 sync.mutex를 이용하여 LinkedBlockingQueue를 구현해 보았다.
+
 
 ## 큐생성
 
@@ -72,3 +116,4 @@ wg.Wait()
 fmt.Println("done...")
 ```
 mutex가 잘 적용 된 듯하다.
+
