@@ -39,9 +39,7 @@ func TestChannel(t *testing.T) {
   fmt.Println("done...")
 }
 ```
-채널로도 queue 형식이 가능하나 채널이 닫혀야 for문에사 빠져나올 수 있기 때문에
-
-go루틴을 계속 유지한 채로 통신을 하고 싶었기에
+채널로도 queue 형식이 가능하나
 
 sync.mutex를 이용하여 LinkedBlockingQueue를 구현해 보았다.
 
